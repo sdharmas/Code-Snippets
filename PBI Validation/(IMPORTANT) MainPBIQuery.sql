@@ -1,0 +1,35 @@
+select [FX Conversion]
+     , [Scenario]
+     , [Route to Market - Subscription]
+     , [Market Segment]
+     , [App Names]
+     , [Ind vs Team vs Ent]
+     , [Offerings]
+     , [Enterprise BU - Name]
+     , [Fiscal Week]
+     , [Value]
+     , [LoadDate]
+     , [Measures2]
+     , [Measures3]
+     , [Offerings2]
+     , [Product1]
+     , [RoutetoMarket2]
+     , [Type1]
+     , [Type2]
+     , [Fiscal Quarter]
+     , [Geo]
+     , [Current Quarter]
+     , [Current_FiscalWeek]
+     , [FiscalWeekNum]
+     , [Internal Offering Custom]
+     , [CustomOffering1]
+     , [CustomOffering2]
+     , [CustomOffering3]
+     , [CustomOffering4]
+from [FINANCE_SYSTEMS].[dbo].[vw_TM1_Subs_Dash]
+where [Fiscal Quarter] in ( '2021 Q2', '2022 Q2' )
+      and [Scenario] in ( 'Q2 QRF 2022', 'Actuals', 'Actuals - FY22 Segmentation', 'OL - Previous', 'Outlook - Current'
+                        , 'OL - Previous 2 Weeks'
+                        )
+      and [Measures3] <> 'Beginning'
+      and [FX Conversion] = 'USD Current Plan Rate'

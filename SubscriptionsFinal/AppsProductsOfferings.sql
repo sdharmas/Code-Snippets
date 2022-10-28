@@ -1,0 +1,11 @@
+select distinct
+       [App Names]
+     , [AppNames1]
+     , Product
+     , Product1
+     , Product2
+     , Offerings
+     , Offerings1
+     , Offerings2
+     , Offerings3
+from dbo.TM1_Revenue_Planning_SubscriptionsFinal;
