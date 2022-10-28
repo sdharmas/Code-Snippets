@@ -1,7 +1,9 @@
 -- Remember to change the QRF scenario at the bottom
 
+-- Actuals prior to 2022-Q3, pull both 'USD as reported' and 'USD Current Plan Rate' from 'Actuals - FY22 Segmentation' scenario
 select [Scenario]
      , [Route to Market - Subscription]
+     , [FX Conversion]
      , [Market Segment]
      , reg.[Region - Name]
      , Current_FiscalWeek
@@ -46,9 +48,10 @@ where (
           Measures3 = 'Beginning'
           or Measures3 = 'Net New'
       )
-      and [FX Conversion] = 'USD Current Plan Rate'
+      and [FX Conversion] in ( 'USD Current Plan Rate', 'USD as Reported' )
       and [Type2] = 'Total ARR'
 group by [Scenario]
+       , [FX Conversion]
        , [Route to Market - Subscription]
        , [Market Segment]
        , reg.[Region - Name]
@@ -81,8 +84,10 @@ group by [Scenario]
        , internal_offering_custom3
        , internal_offering_custom4
 union all
+-- Actuals on or after 2022-Q3, pull both 'USD as reported' and 'USD Current Plan Rate' from 'Actuals' scenario
 select [Scenario]
      , [Route to Market - Subscription]
+     , [FX Conversion]
      , [Market Segment]
      , reg.[Region - Name]
      , Current_FiscalWeek
@@ -127,10 +132,11 @@ where (
           Measures3 = 'Beginning'
           or Measures3 = 'Net New'
       )
-      and [FX Conversion] = 'USD Current Plan Rate'
+      and [FX Conversion] in ( 'USD Current Plan Rate', 'USD as Reported' )
       and [Type2] = 'Total ARR'
 group by [Scenario]
        , [Route to Market - Subscription]
+       , [FX Conversion]
        , [Market Segment]
        , reg.[Region - Name]
        , Current_FiscalWeek
@@ -162,7 +168,9 @@ group by [Scenario]
        , internal_offering_custom3
        , internal_offering_custom4
 union all
+-- Outlook-Current for Current Quarter, pull only 'USD Current Plan Rate'
 select [Scenario]
+     , [FX Conversion]
      , [Route to Market - Subscription]
      , [Market Segment]
      , reg.[Region - Name]
@@ -208,6 +216,7 @@ where ([Fiscal Quarter] = [Current Quarter])
       and [FX Conversion] = 'USD Current Plan Rate'
       and [Type2] = 'Total ARR'
 group by [Scenario]
+       , [FX Conversion]
        , [Route to Market - Subscription]
        , [Market Segment]
        , reg.[Region - Name]
@@ -240,7 +249,9 @@ group by [Scenario]
        , internal_offering_custom3
        , internal_offering_custom4
 union all
+-- QRF for Current Quarter, pull only 'USD Current Plan Rate'
 select [Scenario]
+     , [FX Conversion]
      , [Route to Market - Subscription]
      , [Market Segment]
      , reg.[Region - Name]
@@ -286,6 +297,7 @@ where ([Fiscal Quarter] = [Current Quarter])
       and [FX Conversion] = 'USD Current Plan Rate'
       and [Type2] = 'Total ARR'
 group by [Scenario]
+       , [FX Conversion]
        , [Route to Market - Subscription]
        , [Market Segment]
        , reg.[Region - Name]
