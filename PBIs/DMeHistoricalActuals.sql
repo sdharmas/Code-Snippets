@@ -51,8 +51,8 @@ where (
       and [FX Conversion] in ( 'USD Current Plan Rate', 'USD as Reported' )
       and [Type2] = 'Total ARR'
 group by [Scenario]
-       , [FX Conversion]
        , [Route to Market - Subscription]
+       , [FX Conversion]
        , [Market Segment]
        , reg.[Region - Name]
        , Current_FiscalWeek
@@ -170,8 +170,8 @@ group by [Scenario]
 union all
 -- Outlook-Current for Current Quarter, pull only 'USD Current Plan Rate'
 select [Scenario]
-     , [FX Conversion]
      , [Route to Market - Subscription]
+     , [FX Conversion]
      , [Market Segment]
      , reg.[Region - Name]
      , Current_FiscalWeek
@@ -216,8 +216,8 @@ where ([Fiscal Quarter] = [Current Quarter])
       and [FX Conversion] = 'USD Current Plan Rate'
       and [Type2] = 'Total ARR'
 group by [Scenario]
-       , [FX Conversion]
        , [Route to Market - Subscription]
+       , [FX Conversion]
        , [Market Segment]
        , reg.[Region - Name]
        , Current_FiscalWeek
@@ -251,8 +251,8 @@ group by [Scenario]
 union all
 -- QRF for Current Quarter, pull only 'USD Current Plan Rate'
 select [Scenario]
-     , [FX Conversion]
      , [Route to Market - Subscription]
+     , [FX Conversion]
      , [Market Segment]
      , reg.[Region - Name]
      , Current_FiscalWeek
@@ -297,8 +297,8 @@ where ([Fiscal Quarter] = [Current Quarter])
       and [FX Conversion] = 'USD Current Plan Rate'
       and [Type2] = 'Total ARR'
 group by [Scenario]
-       , [FX Conversion]
        , [Route to Market - Subscription]
+       , [FX Conversion]
        , [Market Segment]
        , reg.[Region - Name]
        , Current_FiscalWeek
