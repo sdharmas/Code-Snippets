@@ -22,11 +22,6 @@ select [Scenario]
      , arr.[Geo]
      , [Current Quarter]
      , [FiscalWeekNum]
-     , [Internal Offering Custom]
-     , [CustomOffering1]
-     , [CustomOffering2]
-     , [CustomOffering3]
-     , [CustomOffering4]
      , internal_offering_custom0
      , internal_offering_custom1
      , internal_offering_custom2
@@ -71,11 +66,6 @@ group by [Scenario]
        , arr.[Geo]
        , [Current Quarter]
        , [FiscalWeekNum]
-       , [Internal Offering Custom]
-       , [CustomOffering1]
-       , [CustomOffering2]
-       , [CustomOffering3]
-       , [CustomOffering4]
        , internal_offering_custom0
        , internal_offering_custom1
        , internal_offering_custom2
@@ -106,11 +96,6 @@ select [Scenario]
      , arr.[Geo]
      , [Current Quarter]
      , [FiscalWeekNum]
-     , [Internal Offering Custom]
-     , [CustomOffering1]
-     , [CustomOffering2]
-     , [CustomOffering3]
-     , [CustomOffering4]
      , internal_offering_custom0
      , internal_offering_custom1
      , internal_offering_custom2
@@ -155,11 +140,6 @@ group by [Scenario]
        , arr.[Geo]
        , [Current Quarter]
        , [FiscalWeekNum]
-       , [Internal Offering Custom]
-       , [CustomOffering1]
-       , [CustomOffering2]
-       , [CustomOffering3]
-       , [CustomOffering4]
        , internal_offering_custom0
        , internal_offering_custom1
        , internal_offering_custom2
