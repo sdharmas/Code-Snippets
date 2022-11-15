@@ -325,7 +325,7 @@ from [FINANCE_SYSTEMS].[dbo].[vw_TM1_Subs_Dash]                                 
     inner join [FINANCE_SYSTEMS].[dbo].[TM1_Revenue_PlanningConsolidatedMarketArea] reg
         on reg.[Market Area - Name] = arr.[Market Area - Name]
 where ([Fiscal Quarter] > [Current Quarter])
-      and [Scenario] = ('QRF - Current')
+      and [Scenario] = ('FY23 Plan v2 submission')
       and
       (
           Measures3 = 'Beginning'
