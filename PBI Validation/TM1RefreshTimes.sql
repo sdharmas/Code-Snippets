@@ -1,0 +1,1 @@
+select distinct scenario, [timestamp] from [dbo].[tm1_planning_subscriptions_cb_combined]
