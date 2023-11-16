@@ -1,4 +1,3 @@
--- Remember to change the QRF scenario at the bottom, and also Plan (do we need it?)
 
 declare @CQtr varchar(10) = '2023 Q4'
 declare @CY varchar(10) = '2023'
@@ -44,35 +43,14 @@ select @CQtr                            as 'Current Quarter'
      , [Scenario]
      , [Fiscal Quarter]
      , case
-           when (Measures3 = 'Beginning')
-                or
-                (
-                    Measures3 = 'Net New'
-                    and
-                    (
-                        (
-                            Scenario = 'Actuals - Segmentation'
-                            and FW.[Relative Fiscal Quarter] = @RFQ - 4
-                        )
-                        or
-                        (
-                            Scenario = 'Actuals'
-                            and FW.[Relative Fiscal Quarter] = @RFQ - 1
-                        )
-                        or
-                        -- The below is needed for the R/B/U Ending ARR Adjustment, we need to get the week grain
-                        (
-                            Scenario = 'Actuals'
-                            and [Fiscal Quarter] = '2023 Q1'
-                        )
-                        or FW.[Relative Fiscal Quarter] = @RFQ + 4
-                    )
-                    and CAST(right(FW.TM1_Fiscal_WeekinQtr, 2) as int) <= AFW.ActualsFiscalWeek_int
-                ) then
-               [Fiscal Week]
+           when FiscalWeekNum < CW.WkNum
+                and [Route to Market - Subscription] <> 'Enterprise'
+                and [Route to Market - Subscription] <> 'Phone - Named'
+                and [Route to Market - Subscription] <> 'Reseller - Named' then
+               'QTD'
            else
-               MaxFiscalWeekinYr
-       end                              as [Fiscal Week]
+               'QTG'
+       end as [QTD/QTG]
      , [Market Segment]
      , Offerings
      , [App Names]
@@ -101,55 +79,21 @@ select @CQtr                            as 'Current Quarter'
      , [Measures2]
      , [Measures3]
      , [Type2]
+     , FINSYS_LoadDate                  as LoadDate
      , case
            when [Type2] = 'Total ARR' then
                sum([Value]) / 1e6
-           when [Type2] = 'Total Units' then
-               sum([Value]) / 1e3
+       --    when [Type2] = 'Total Units' then
+       --        sum([Value]) / 1e3
        end                              as ValueAdj
-     , FINSYS_LoadDate                  as LoadDate
 from [FINANCE_SYSTEMS].[dbo].[vw_TM1_Subs_Dash] A
     left join
     (
-        select right(min([Fiscal WeekinYear]), 2)         as MinWeekinQtr
-             , right(max([Fiscal WeekinQtr]), 2)          as MaxWkinQtr
-             , replace([Fiscal Qtr/Year], '-', ' ')       as FiscalYrQtr
-             , max(replace([Fiscal WeekinYear], '-', '')) as MaxFiscalWeekinQtr_52
+        select right(TM1_Fiscal_WeekinQtr, 2) WkNum
         from [dbo].[Date_FiscalDateLookup]
-        group by replace([Fiscal Qtr/Year], '-', ' ')
-    )                                           Dt
-        on A.[Fiscal Quarter] = Dt.FiscalYrQtr
-    left join
-    (
-        select TM1_Fiscal_WeekinQtr
-             , [Fiscal WeekinYear]
-             , [Relative Fiscal Quarter]
-             , [Relative Fiscal Week]
-             , [Relative Fiscal Year]
-        from FINANCE_SYSTEMS.[dbo].[Date_FiscalDateLookup]
-        group by TM1_Fiscal_WeekinQtr
-               , [Fiscal WeekinYear]
-               , [Relative Fiscal Quarter]
-               , [Relative Fiscal Week]
-               , [Relative Fiscal Year]
-    )                                           FW
-        on replace(FW.[Fiscal WeekinYear], '-', '') = A.[Fiscal Week]
-    left join
-    (
-        select CAST(right(TM1_Fiscal_WeekinQtr, 2) as int) as ActualsFiscalWeek_int
-        from FINANCE_SYSTEMS.[dbo].[Date_FiscalDateLookup]
-        where [Relative Fiscal Week] = -1
-        group by CAST(right(TM1_Fiscal_WeekinQtr, 2) as int)
-    )                                           AFW
+        where [Relative Day] = 0
+    )                                           CW
         on 1 = 1
-    left join
-    (
-        select [Fiscal Year]                              as FY_Y
-             , max(replace([Fiscal WeekinYear], '-', '')) as MaxFiscalWeekinYr
-        from [dbo].[Date_FiscalDateLookup]
-        group by [Fiscal Year]
-    )                                           Yr
-        on A.[Fiscal Year] = Yr.FY_Y
 where (
           (
               [Fiscal Year] >= '2016'
@@ -172,11 +116,9 @@ where (
           )
           or
           (
-              [Scenario] = ('Actuals')
-              -- and  [Fiscal Quarter] < @CQtr
-              and [Relative Fiscal Year] = 0
-              and [Relative Fiscal Week] < 0
-          ) -- All Fiscal Weeks data in Current Year and less than Current Week 
+              [Fiscal Year] >= '2023'
+              and [Scenario] = ('Actuals')
+          )
           or
           (
               [Fiscal Quarter] = @CQtr
@@ -194,14 +136,7 @@ where (
               and [Scenario] like ('%Ops Plan%')
           )
       )
-      and (
-    --   (
-    --       Measures3 = 'Beginning'
-    --       and right([Fiscal Week], 2) = MinWeekinQtr
-    --   ) -- Get only data from first week of the quarter
-    --   or 
-    (Measures3 = 'Net New')
-          )
+      and Measures3 = 'Net New'
       and 1 = case
                   when [Type2] in ( 'Total ARR' )
                        and [FX Conversion] in ( 'USD Current Plan Rate' ) then
@@ -217,7 +152,6 @@ where (
                   else
                       0
               end
---   and [Fiscal Quarter] = '2023 Q2'
 group by [Scenario]
        , Offerings
        , [App Names]
@@ -230,36 +164,15 @@ group by [Scenario]
        , [Measures3]
        , [RoutetoMarket2]
        , [Fiscal Quarter]
-       , case
-             when (Measures3 = 'Beginning')
-                  or
-                  (
-                      Measures3 = 'Net New'
-                      and
-                      (
-                          (
-                              Scenario = 'Actuals - Segmentation'
-                              and FW.[Relative Fiscal Quarter] = @RFQ - 4
-                          )
-                          or
-                          (
-                              Scenario = 'Actuals'
-                              and FW.[Relative Fiscal Quarter] = @RFQ - 1
-                          )
-                          or
-                          -- The below is needed for the R/B/U Ending ARR Adjustment, we need to get the week grain
-                          (
-                              Scenario = 'Actuals'
-                              and [Fiscal Quarter] = '2023 Q1'
-                          )
-                          or FW.[Relative Fiscal Quarter] = @RFQ + 4
-                      )
-                      and CAST(right(FW.TM1_Fiscal_WeekinQtr, 2) as int) <= AFW.ActualsFiscalWeek_int
-                  ) then
-                 [Fiscal Week]
-             else
-                 MaxFiscalWeekinYr
-         end
+     , case
+           when FiscalWeekNum < CW.WkNum
+                and [Route to Market - Subscription] <> 'Enterprise'
+                and [Route to Market - Subscription] <> 'Phone - Named'
+                and [Route to Market - Subscription] <> 'Reseller - Named' then
+               'QTD'
+           else
+               'QTG'
+       end
        , internal_offering_custom0
        , case
              when [Route to Market - Subscription] = 'Enterprise' then
@@ -280,4 +193,3 @@ group by [Scenario]
        , [Route to Market - Subscription]
        , [Type2]
        , [Market Segment]
--- ) t1
