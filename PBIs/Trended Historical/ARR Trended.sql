@@ -1,8 +1,11 @@
 -- Remember to change variables before the dotted line section
 
 declare @CQtr varchar(10) = '2023 Q4'
+
 declare @QRFsnap varchar(50) = 'Dashboard QRF'
+
 declare @QRF varchar(50) = 'Q4 QRF 2023'
+
 declare @Plan varchar(50) = '2023 Plan'
 
 ------------------------------------------------------------------------------------------
@@ -148,7 +151,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
         or
         (
             [Fiscal Year] > @CY
-            and [Scenario] in ( 'FY24 Plan v1', 'Dashboard QRF' )
+            and [Scenario] in ( '%FY24 Plan%', @QRFsnap )
         )
         or
         (
