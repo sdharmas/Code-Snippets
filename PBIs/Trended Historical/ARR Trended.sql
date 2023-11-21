@@ -21,28 +21,28 @@ declare @today varchar(50) =
         (
             select format(getdate(), 'yyyy-MM-dd')
         )
-declare @CFQtoday varchar(50) =
-        (
-            select [TM1_Fiscal Qtr/Year]
-            from Date_FiscalDateLookup
-            where DayOfCalendarDate = @today
-        )
-declare @RFQtoday varchar(50) =
-        (
-            select [Relative Fiscal Quarter]
-            from Date_FiscalDateLookup
-            where DayOfCalendarDate = @today
-        )
-declare @RFQQuarterEnd varchar(50) =
-        (
-            select [Relative Fiscal Quarter]
-            from Date_FiscalDateLookup
-            where DayOfCalendarDate = @lastdayofQtr
-        )
-declare @RFQ varchar(50) =
-        (
-            select case when @CFQtoday > @CQtr then @RFQQuarterEnd else @RFQtoday end
-        )
+-- declare @CFQtoday varchar(50) =
+--         (
+--             select [TM1_Fiscal Qtr/Year]
+--             from Date_FiscalDateLookup
+--             where DayOfCalendarDate = @today
+--         )
+-- declare @RFQtoday varchar(50) =
+--         (
+--             select [Relative Fiscal Quarter]
+--             from Date_FiscalDateLookup
+--             where DayOfCalendarDate = @today
+--         )
+-- declare @RFQQuarterEnd varchar(50) =
+--         (
+--             select [Relative Fiscal Quarter]
+--             from Date_FiscalDateLookup
+--             where DayOfCalendarDate = @lastdayofQtr
+--         )
+-- declare @RFQ varchar(50) =
+--         (
+--             select case when @CFQtoday > @CQtr then @RFQQuarterEnd else @RFQtoday end
+--         )
 declare @RdayQuarterEnd varchar(50) =
         (
             select [Relative Day]
@@ -54,14 +54,15 @@ declare @Rday varchar(50) =
             select case when @today > @lastdayofQtr then @RdayQuarterEnd else 0 end
         )
 -- select @today          today
---      , @lastdayofQtr   lastday
---      , @RdayQuarterEnd RdayQE
---      , @Rday           Rday
--- select distinct
---        [Fiscal Quarter]
---      , [Fiscal Week]
--- from
--- (
+    --  , @CFQtoday       'CFQ (based on today)'
+--     , @CQtr           'Current Qtr (hardcoded)'
+    --  , @RFQtoday       'RFQ (based on today)'
+--     , @lastdayofQtr   'last day of Qtr'
+    --  , @RFQQuarterEnd  'RFQ (QE) based on last day of Qtr'
+    --  , @RFQ            'RFQ (cond: RFQ [today] or [QE])'
+--     , @RdayQuarterEnd 'RdayQE (at Quarter End)'
+--     , @Rday           'Rday (cond: RdayQE or 0)'
+
 select @CQtr                            as 'Current Quarter'
      , internal_offering_custom0
      , [Scenario]
@@ -146,6 +147,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
                                 'DME 2024 Ops Plan Pass 3', 
                                 'DME 2024 Ops Plan Pass 3.5', 
                                 'DME 2024 Ops Plan Pass 3.75',
+                                'DME 2024 Ops Plan Pass 4.0',
                                 'DME 2024 Strat Plan Pass 2', 
                                 'Strat Plan - FY24 to FY26', 
                                 'Strat Plan v2 - FY24 to FY26'
@@ -184,7 +186,6 @@ where --[Fiscal Quarter] = '2023 Q3' and
                 else
                     0
             end
---   and [Fiscal Quarter] = '2023 Q2'
 group by [Scenario]
        , Offerings
        , [App Names]
