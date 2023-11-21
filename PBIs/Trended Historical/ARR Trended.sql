@@ -119,20 +119,6 @@ from [FINANCE_SYSTEMS].[dbo].[vw_TM1_Subs_Dash] A
 where --[Fiscal Quarter] = '2023 Q3' and
     (
         (
-            [Fiscal Year] >= '2016'
-            and [Fiscal Year] <= '2018'
-            and [Scenario] = 'Actuals'
-            and [Type2] = 'Total ARR'
-        ) -- Actuals Total ARR from 2016, 2017, 2018
-        or
-        (
-            [Fiscal Year] >= '2017'
-            and [Fiscal Year] <= '2018'
-            and [Scenario] = 'Actuals'
-            and [Type2] = 'Total Units'
-        ) -- Actuals Total Units from 2017, 2018
-        or
-        (
             [Fiscal Year] >= '2019'
             and [Fiscal Year] <= '2022'
             and [Scenario] = ('Actuals - Segmentation')
@@ -143,20 +129,37 @@ where --[Fiscal Quarter] = '2023 Q3' and
             and [Scenario] = ('Actuals')
         )
         or
-        (
+         (
             [Fiscal Quarter] = @CQtr
-            and [Scenario] in ( 'Outlook - Current', 'OL - Previous', @Plan, @QRF )
+            and [Scenario] in ( 'Outlook - Current', 'OL - Previous' )
         ) --- Outlook - Current from Current Fiscal Quarter
-
         or
         (
-            [Fiscal Year] > @CY
-            and [Scenario] in ( '%FY24 Plan%', @QRFsnap )
+            [Fiscal Year] = @CY
+            and [Scenario] in ( @Plan, @QRF, @QRFsnap, 'Q2 QRF 2023', 'Q3 QRF 2023' )
         )
         or
         (
             [Fiscal Year] > @CY
-            and [Scenario] like ('%Ops Plan%')
+            and [Scenario] in ( 
+                                'DME 2024 Ops Plan Pass 2.5', 
+                                'DME 2024 Ops Plan Pass 3', 
+                                'DME 2024 Ops Plan Pass 3.5', 
+                                'DME 2024 Ops Plan Pass 3.75',
+                                'DME 2024 Strat Plan Pass 2', 
+                                'Strat Plan - FY24 to FY26', 
+                                'Strat Plan v2 - FY24 to FY26'
+                              )
+        )
+        or
+        (
+            [Fiscal Year] > @CY
+            and [Scenario] like ('%FY24 Plan%')
+        )
+        or
+        (
+            [Fiscal Year] > @CY
+            and [Scenario] in ( '2024 Plan' )
         )
     )
     and
