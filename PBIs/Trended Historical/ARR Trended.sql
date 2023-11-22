@@ -54,12 +54,12 @@ declare @Rday varchar(50) =
             select case when @today > @lastdayofQtr then @RdayQuarterEnd else 0 end
         )
 -- select @today          today
-    --  , @CFQtoday       'CFQ (based on today)'
+--  , @CFQtoday       'CFQ (based on today)'
 --     , @CQtr           'Current Qtr (hardcoded)'
-    --  , @RFQtoday       'RFQ (based on today)'
+--  , @RFQtoday       'RFQ (based on today)'
 --     , @lastdayofQtr   'last day of Qtr'
-    --  , @RFQQuarterEnd  'RFQ (QE) based on last day of Qtr'
-    --  , @RFQ            'RFQ (cond: RFQ [today] or [QE])'
+--  , @RFQQuarterEnd  'RFQ (QE) based on last day of Qtr'
+--  , @RFQ            'RFQ (cond: RFQ [today] or [QE])'
 --     , @RdayQuarterEnd 'RdayQE (at Quarter End)'
 --     , @Rday           'Rday (cond: RdayQE or 0)'
 
@@ -130,7 +130,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
             and [Scenario] = ('Actuals')
         )
         or
-         (
+        (
             [Fiscal Quarter] = @CQtr
             and [Scenario] in ( 'Outlook - Current', 'OL - Previous' )
         ) --- Outlook - Current from Current Fiscal Quarter
@@ -142,16 +142,13 @@ where --[Fiscal Quarter] = '2023 Q3' and
         or
         (
             [Fiscal Year] > @CY
-            and [Scenario] in ( 
-                                'DME 2024 Ops Plan Pass 2.5', 
-                                'DME 2024 Ops Plan Pass 3', 
-                                'DME 2024 Ops Plan Pass 3.5', 
-                                'DME 2024 Ops Plan Pass 3.75',
-                                'DME 2024 Ops Plan Pass 4.0',
-                                'DME 2024 Strat Plan Pass 2', 
-                                'Strat Plan - FY24 to FY26', 
-                                'Strat Plan v2 - FY24 to FY26'
+            and
+            (
+                [Scenario] in ( 'DME 2024 Strat Plan Pass 2', 'Strat Plan - FY24 to FY26'
+                              , 'Strat Plan v2 - FY24 to FY26'
                               )
+                or Scenario like ('%DME 2024 Ops Plan Pass%')
+            )
         )
         or
         (
