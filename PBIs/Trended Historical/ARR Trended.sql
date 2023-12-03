@@ -64,10 +64,13 @@ declare @Rday varchar(50) =
 --     , @Rday           'Rday (cond: RdayQE or 0)'
 
 select @CQtr                            as 'Current Quarter'
+     , @Rday                            as 'Relative Day at Quarter End'
      , internal_offering_custom0
      , [Scenario]
      , [Fiscal Quarter]
      , case
+           when @Rday < 0 then
+               'QTD' -- Quarter has closed so all weeks are QTD
            when FiscalWeekNum < CW.WkNum
                 and [Route to Market - Subscription] <> 'Enterprise' then
                'QTD'
@@ -196,6 +199,8 @@ group by [Scenario]
        , [RoutetoMarket2]
        , [Fiscal Quarter]
        , case
+             when @Rday < 0 then
+                 'QTD' -- Quarter has closed so all weeks are QTD
              when FiscalWeekNum < CW.WkNum
                   and [Route to Market - Subscription] <> 'Enterprise' then
                  'QTD'
