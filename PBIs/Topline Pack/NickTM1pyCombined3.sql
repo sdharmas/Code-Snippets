@@ -49,5 +49,5 @@ where [type] = 'Total ARR'
           and Product not in ( 'Stock D2P Returns', 'Stock on Demand', 'Sign Transactions', 'LIC', 'Shrink'
                              , 'CP Default', 'CP005', 'CP016', 'CP040', 'CP080', 'CP150', 'CP500', 'CP001'
                              )
-          and route_to_market_subscriptions <> 'All Enterprise'
+          and route_to_market_subscriptions not in ( 'Enterprise', 'Phone - Named', 'Reseller - Named' )
       )
