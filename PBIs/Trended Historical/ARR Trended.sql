@@ -85,22 +85,6 @@ select @CQtr                            as 'Current Quarter'
      , [Ind vs Team vs Ent]
      , [Enterprise BU - Name]
      , [RoutetoMarket2]
-    --  , case
-    --        when [Route to Market - Subscription] = 'Enterprise' then
-    --            'ETLA'
-    --        when [Route to Market - Subscription] in ( 'Phone - Named', 'Reseller - Named' ) then
-    --            'VIP'
-    --        when [Route to Market - Subscription] like '%Web%' then
-    --            'Web'
-    --        when [Route to Market - Subscription] in ( 'Phone', 'Phone Mid-Market' ) then
-    --            'Phones'
-    --        when [Route to Market - Subscription] = 'App Store' then
-    --            'App Store'
-    --        when [Route to Market - Subscription] = '#' then
-    --            '#'
-    --        else
-    --            'Channel'
-    --    end                              as RTM1
      , [Route to Market - Subscription] as RTM3
      , [Measures2]
      , [Measures3]
@@ -151,7 +135,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
                               , 'Strat Plan v2 - FY24 to FY26'
                               )
                 or Scenario like ('%DME 2024 Ops Plan Pass%')
-                or Scenario = 'QRF - Mid'
+                or Scenario in ( 'QRF - Mid', 'FY24 High Submission', 'FY24 Mid Submission' )
             )
         )
         or
@@ -209,22 +193,6 @@ group by [Scenario]
                  'QTG'
          end
        , internal_offering_custom0
-    --    , case
-    --          when [Route to Market - Subscription] = 'Enterprise' then
-    --              'ETLA'
-    --          when [Route to Market - Subscription] in ( 'Phone - Named', 'Reseller - Named' ) then
-    --              'VIP'
-    --          when [Route to Market - Subscription] like '%Web%' then
-    --              'Web'
-    --          when [Route to Market - Subscription] in ( 'Phone', 'Phone Mid-Market' ) then
-    --              'Phones'
-    --          when [Route to Market - Subscription] = 'App Store' then
-    --              'App Store'
-    --          when [Route to Market - Subscription] = '#' then
-    --              '#'
-    --          else
-    --              'Channel'
-    --      end
        , [Route to Market - Subscription]
        , [Type2]
        , [Market Segment]
