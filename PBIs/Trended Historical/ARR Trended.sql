@@ -124,7 +124,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
         or
         (
             [Fiscal Year] = @CY
-            and [Scenario] in ( @Plan, @QRF, @QRFsnap, 'Q2 QRF 2023', 'Q3 QRF 2023' )
+            and [Scenario] in ( @Plan, @QRF, 'Q2 QRF 2023', 'Q3 QRF 2023' )
         )
         or
         (
@@ -147,6 +147,10 @@ where --[Fiscal Quarter] = '2023 Q3' and
         (
             [Fiscal Year] > @CY
             and [Scenario] in ( '2024 Plan' )
+        )
+        or         (
+            [Fiscal Year] >= @CY
+            and [Scenario] = ('@QRFsnap' )
         )
     )
     and
