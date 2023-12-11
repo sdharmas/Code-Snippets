@@ -150,7 +150,7 @@ where --[Fiscal Quarter] = '2023 Q3' and
         )
         or         (
             [Fiscal Year] >= @CY
-            and [Scenario] = ('@QRFsnap' )
+            and [Scenario] = @QRFsnap
         )
     )
     and
