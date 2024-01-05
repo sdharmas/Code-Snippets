@@ -33,7 +33,7 @@ select [FX Conversion]
      , [Type2]
      , [Fiscal Quarter]
      , [Geo]
-     , [Current Quarter]
+     , @CQtr 'Current Quarter'
      , [FiscalWeekNum]
      , internal_offering_custom0
      , sum([Value])                     as ValueAdj
@@ -80,7 +80,7 @@ group by [FX Conversion]
        , [Type2]
        , [Fiscal Quarter]
        , [Geo]
-       , [Current Quarter]
+    --    , [Current Quarter]
        , [FiscalWeekNum]
        , internal_offering_custom0
        , [Route to Market - Subscription]
