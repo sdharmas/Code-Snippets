@@ -1,3 +1,20 @@
+-- Remember to update the DMe Shared CCH2 List in the values section
+
+declare @CCH2_DMeShared_list table
+(
+    id int identity(1, 1)
+  , CCH2Name varchar(255)
+);
+
+insert into @CCH2_DMeShared_list
+(
+    CCH2Name
+)
+values
+('DME Mgmt')
+, ('SDE Mgmt')
+, ('GARCIA');
+
 -- select [Fiscal Year]
 --      , [Version]
 --      , [P&L Category]
@@ -45,9 +62,10 @@
              , [Cost Center]
              , [Enterprise BU Name]
              , case
-                   when [CCH Lvl 3 Name] in ( 'DME Mgmt L3', 'SDE Mgmt L3' ) then
-                       'Digital Media Shared'
-                   when [CCH Lvl 2 Name] = 'GARCIA' then
+                   when [CCH Lvl 2 Name] in
+                        (
+                            select CCH2Name from @CCH2_DMeShared_list
+                        ) then
                        'Digital Media Shared'
                    when [Profit Center Trimmed] = '1792' then
                        'Express'
@@ -75,16 +93,9 @@
         group by [Fiscal Year]
                , [Fiscal Qtr/Year]
                , [Version]
-               , case
-                     when [CCH Lvl 3 Name] in ( 'DME Mgmt L3', 'SDE Mgmt L3' ) then
-                         'Digital Media Shared'
-                     when [CCH Lvl 2 Name] = 'GARCIA' then
-                         'Digital Media Shared'
-                     when [Profit Center Trimmed] = '1792' then
-                         'Express'
-                     else
-                         [Enterprise BU Name]
-                 end
+               , [CCH Lvl 2 Name]
+               , [Profit Center Trimmed]
+               , [Enterprise BU Name]
                , [COGS/OPEX CE Group]
                , [DME COGS Category]
                , [Reporting Area Desc]
